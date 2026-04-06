@@ -1,7 +1,8 @@
-.venv
+/.venv
 __pycache__/
 artifacts/
 MUJOCO_LOG.TXT
 .DS_Store
 .mplconfig/
 .env
+/mujoco

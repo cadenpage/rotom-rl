@@ -1,58 +1,43 @@
-
 {
-    "url": "https://cad.onshape.com/documents/ab6e3c0ee4a2fc4151c6dae5/w/a4e52fdbe5152873bed2f6f9/e/bdebac347cab8c0af7a693ad",
-    "output_format": "mujoco",
-    // ...
-    // General import options (see config.json documentation)
-    // ...
+  "url": "https://cad.onshape.com/documents/ab6e3c0ee4a2fc4151c6dae5/w/a4e52fdbe5152873bed2f6f9/e/bdebac347cab8c0af7a693ad",
+  "output_format": "mujoco",
 
-    // Additional XML file to be included in the URDF (default: "")
-    //s"additional_xml": "custom.xml",
-
-    // Override joint properties (default: {})
-    "joint_properties": {
-        // Default properties for all joints
-        "*": {
-            "actuated": true,
-            "forcerange": 10.0,
-            "frictionloss": 0.5,
-            "limits": [0.5, 1.2]
-            // ...
-        },
-        // Set the properties for a specific joint
-        "joint_name": {
-            "forcerange": 20.0,
-            "frictionloss": 0.1
-            // ...
-        }
+  "joint_properties": {
+    "*": {
+      "actuated": true,
+      "forcerange": 10.0,
+      "frictionloss": 0.1,
+      "armature": 0.01,
+      "damping": 0.5,
+      "kp": 20,
+      "dampratio": 1.0
     },
-
-    // Override geometry properties (default: {})
-    "geom_properties": {
-        // Set properties for specific links using pattern matching
-        "foot": {
-            "collision": {
-                "name": "left_foot_collision",
-                "friction": "1.2 0.005 0.0001"
-            }
-        },
-        // Wildcard patterns are supported
-        "leg_*": {
-            "collision": {
-                "solimp": "0.9 0.95 0.001",
-                "solref": "0.02 1"
-            },
-            "visual": {
-                "rgba": "1 0 0 1"
-            }
-        }
+    "O": {
+      "limits": [-1.787524, 1.787524]
     },
-
-    // Override equality attributes
-    "equalities": {
-        "closing_branch*": {
-            "solref": "0.002 1",
-            "solimp": "0.99 0.999 0.0005 0.5 2"
-        }
+    "A": {
+      "limits": [-3.141593, 0.405070]
+    },
+    "B": {
+      "limits": [-0.0421948, 3.141593]
+    },
+    "C": {
+      "limits": [-3.141593, 0.377451]
     }
+  },
+
+  "geom_properties": {
+    "ground": {
+      "collision": {
+        "contype": 0,
+        "conaffinity": 0
+      }
+    },
+    "servo": {
+      "collision": {
+        "contype": 0,
+        "conaffinity": 0
+      }
+    }
+  }
 }
