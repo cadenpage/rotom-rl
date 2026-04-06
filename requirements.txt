@@ -1,0 +1,17 @@
+# python3.12 -m venv .venv
+
+torch
+torchvision
+matplotlib
+numpy
+seaborn
+scikit-learn
+gymnasium
+stable-baselines3
+ipykernel
+notebook
+mujoco
+mediapy
+onshape-to-robot
+
+# ./.venv/bin/python -m pip install -r requirements.txt

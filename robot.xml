@@ -1,0 +1,101 @@
+<?xml version="1.0" ?>
+<!-- Generated using onshape-to-robot -->
+<!-- Onshape https://cad.onshape.com/documents/ab6e3c0ee4a2fc4151c6dae5/w/a4e52fdbe5152873bed2f6f9/e/bdebac347cab8c0af7a693ad -->
+<mujoco model="rotom-rl">
+  <compiler angle="radian" meshdir="assets" autolimits="true"/>
+  <default>
+    <default class="rotom-rl">
+      <joint frictionloss="0.1" armature="0.005"/>
+      <position kp="50" dampratio="1"/>
+      <default class="visual">
+        <geom type="mesh" contype="0" conaffinity="0" group="2"/>
+      </default>
+      <default class="collision">
+        <geom group="3"/>
+      </default>
+    </default>
+  </default>
+  <worldbody>
+    <!-- Link ground -->
+    <body name="ground" pos="0 0 0" quat="1 0 0 0" childclass="rotom-rl">
+      <inertial pos="-0 0.00709416 0.0289597" mass="0.145776" fullinertia="3.96028e-05 2.15022e-05 3.33025e-05 0 3.8e-11 5.1146e-08"/>
+      <!-- Part servo -->
+      <geom type="mesh" class="visual" pos="-0 -0.0155 0.0292289" quat="0.5 -0.5 0.5 0.5" mesh="servo" material="servo_material"/>
+      <geom type="mesh" class="collision" pos="-0 -0.0155 0.0292289" quat="0.5 -0.5 0.5 0.5" mesh="servo" material="servo_material"/>
+      <!-- Part ground -->
+      <geom type="mesh" class="visual" pos="0 0 0" quat="1 0 0 0" mesh="ground" material="ground_material"/>
+      <geom type="mesh" class="collision" pos="0 0 0" quat="1 0 0 0" mesh="ground" material="ground_material"/>
+      <!-- Link link_1 -->
+      <body name="link_1" pos="-0 0.02 0.0292289" quat="0.707107 0 0 0.707107">
+        <!-- Joint from ground to link_1 -->
+        <joint axis="0 0 1" name="O" type="hinge" range="0.5 1.2" frictionloss="0.5"/>
+        <inertial pos="0.0330963 0.000205748 0.0396944" mass="0.188621" fullinertia="0.000111322 0.000111714 3.56272e-05 -5.0607e-08 -9.43914e-06 -3.57802e-07"/>
+        <!-- Part link_1 -->
+        <geom type="mesh" class="visual" pos="0.05 0.012 -0.023" quat="1 0 0 0" mesh="link_1" material="link_1_material"/>
+        <geom type="mesh" class="collision" pos="0.05 0.012 -0.023" quat="1 0 0 0" mesh="link_1" material="link_1_material"/>
+        <!-- Part servo_2 -->
+        <geom type="mesh" class="visual" pos="0.0344 -2.89489e-05 0.026" quat="0.707107 -0 -0 0.707107" mesh="servo" material="servo_material"/>
+        <geom type="mesh" class="collision" pos="0.0344 -2.89489e-05 0.026" quat="0.707107 -0 -0 0.707107" mesh="servo" material="servo_material"/>
+        <!-- Link link2 -->
+        <body name="link2" pos="0.0344 -2.89489e-05 0.0615" quat="0 -0 0.707107 0.707107">
+          <!-- Joint from link_1 to link2 -->
+          <joint axis="0 0 1" name="A" type="hinge" range="0.5 1.2" frictionloss="0.5"/>
+          <inertial pos="0.0911143 0.0129454 0.000216754" mass="0.179251" fullinertia="5.47043e-05 0.000136109 0.000150546 -2.00129e-05 -3.29504e-07 -1.33806e-07"/>
+          <!-- Part servo_3 -->
+          <geom type="mesh" class="visual" pos="0.0996 -0.0065 -2.89489e-05" quat="0.5 -0.5 -0.5 -0.5" mesh="servo" material="servo_material"/>
+          <geom type="mesh" class="collision" pos="0.0996 -0.0065 -2.89489e-05" quat="0.5 -0.5 -0.5 -0.5" mesh="servo" material="servo_material"/>
+          <!-- Part link2 -->
+          <geom type="mesh" class="visual" pos="0.02 -0.012 0" quat="0.5 -0.5 -0.5 -0.5" mesh="link2" material="link2_material"/>
+          <geom type="mesh" class="collision" pos="0.02 -0.012 0" quat="0.5 -0.5 -0.5 -0.5" mesh="link2" material="link2_material"/>
+          <!-- Link link3 -->
+          <body name="link3" pos="0.0996 0.029 -2.89489e-05" quat="0 -0 1 0">
+            <!-- Joint from link2 to link3 -->
+            <joint axis="0 0 1" name="B" type="hinge" range="0.5 1.2" frictionloss="0.5"/>
+            <inertial pos="0.0965002 -2.058e-09 -0.00021126" mass="0.183905" fullinertia="3.04765e-05 0.000194145 0.000183739 -2.7e-11 4.81307e-07 5.3e-11"/>
+            <!-- Part link3 -->
+            <geom type="mesh" class="visual" pos="0.02 -0.012 -0" quat="0.5 -0.5 -0.5 -0.5" mesh="link3" material="link3_material"/>
+            <geom type="mesh" class="collision" pos="0.02 -0.012 -0" quat="0.5 -0.5 -0.5 -0.5" mesh="link3" material="link3_material"/>
+            <!-- Part servo_4 -->
+            <geom type="mesh" class="visual" pos="0.086 0 2.89489e-05" quat="0.707107 0 0.707107 -0" mesh="servo" material="servo_material"/>
+            <geom type="mesh" class="collision" pos="0.086 0 2.89489e-05" quat="0.707107 0 0.707107 -0" mesh="servo" material="servo_material"/>
+            <!-- Link link4 -->
+            <body name="link4" pos="0.1215 0 2.89489e-05" quat="0.707107 -0 -0 0.707107">
+              <!-- Joint from link3 to link4 -->
+              <joint axis="0 0 1" name="C" type="hinge" range="0.5 1.2" frictionloss="0.5"/>
+              <inertial pos="0.0257597 -0 -0" mass="0.0230123" fullinertia="5.1346e-06 1.2118e-05 9.18122e-06 -0 -0 0"/>
+              <!-- Part link4 -->
+              <geom type="mesh" class="visual" pos="0.02 -0.012 0" quat="0.5 -0.5 -0.5 -0.5" mesh="link4" material="link4_material"/>
+              <geom type="mesh" class="collision" pos="0.02 -0.012 0" quat="0.5 -0.5 -0.5 -0.5" mesh="link4" material="link4_material"/>
+              <!-- Part frame -->
+              <geom type="mesh" class="visual" pos="0.064 -0 -0" quat="0 -0.707107 0 -0.707107" mesh="frame" material="frame_material"/>
+              <geom type="mesh" class="collision" pos="0.064 -0 -0" quat="0 -0.707107 0 -0.707107" mesh="frame" material="frame_material"/>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <asset>
+    <mesh file="frame.stl"/>
+    <mesh file="link2.stl"/>
+    <mesh file="link4.stl"/>
+    <mesh file="servo.stl"/>
+    <mesh file="link_1.stl"/>
+    <mesh file="link3.stl"/>
+    <mesh file="ground.stl"/>
+    <material name="servo_material" rgba="0.529412 0.568627 0.6 1"/>
+    <material name="ground_material" rgba="0.501961 0.486275 0.439216 1"/>
+    <material name="link_1_material" rgba="0.729412 0.25098 0.105882 1"/>
+    <material name="link2_material" rgba="0.196078 0.439216 0.0784314 1"/>
+    <material name="link3_material" rgba="0.0627451 0.266667 0.490196 1"/>
+    <material name="link4_material" rgba="1 0.756863 0.054902 1"/>
+    <material name="frame_material" rgba="0.917647 0.917647 0.917647 1"/>
+  </asset>
+  <actuator>
+    <position class="rotom-rl" name="O" joint="O" forcerange="-10.0 10.0" inheritrange="1"/>
+    <position class="rotom-rl" name="A" joint="A" forcerange="-10.0 10.0" inheritrange="1"/>
+    <position class="rotom-rl" name="B" joint="B" forcerange="-10.0 10.0" inheritrange="1"/>
+    <position class="rotom-rl" name="C" joint="C" forcerange="-10.0 10.0" inheritrange="1"/>
+  </actuator>
+  <equality/>
+</mujoco>
