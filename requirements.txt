@@ -13,5 +13,6 @@ notebook
 mujoco
 mediapy
 onshape-to-robot
+pygame
 
-# ./.venv/bin/python -m pip install -r requirements.txt
+# ./.venv/bin/python -m pip install -r requirements.txt 

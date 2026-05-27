@@ -1,11 +1,9 @@
 # rotom-rl
 
-`rotom-rl` is a local MuJoCo workspace for two parallel tracks:
+`rotom-rl` is a local MuJoCo workspace for two related pieces:
 
 - A generated MuJoCo model of the Rotom mechanism exported from Onshape.
-- A small reinforcement learning starter built around a separate 2D point-reacher task.
-
-Those two tracks are not connected yet. The articulated Rotom model is present in the repo, but the current RL loop in `basline.py` trains only on `assets/point_reacher.xml`.
+- A PPO training script for end-effector reaching on that mechanism.
 
 <div style="display: flex; justify-content: center; gap: 20px;">
   <img src="imgs/rotom_insim.png" alt="Rotom in simulation" height="400"/>
@@ -16,10 +14,10 @@ Those two tracks are not connected yet. The articulated Rotom model is present i
 
 - `robot.xml`: generated MuJoCo model of the Rotom mechanism.
 - `scene.xml`: lightweight scene wrapper that includes `robot.xml`, lighting, and a floor plane.
-- `assets/`: CAD meshes for the robot plus `point_reacher.xml`, the standalone RL task.
+- `assets/`: CAD meshes for the robot plus older MuJoCo experiments.
 - `config.json`: `onshape-to-robot` export configuration for the Onshape document.
-- `basline.py`: Gymnasium + Stable-Baselines3 starter script for training PPO on the point-reacher environment.
-- `artifacts/`: saved PPO checkpoints such as `ppo_point_reacher.zip` and other generated outputs. This directory is gitignored.
+- `basline.py`: Gymnasium + Stable-Baselines3 training script for Rotom end-effector reaching.
+- `artifacts/`: saved PPO checkpoints and generated plots. This directory is gitignored.
 - `justfile`: convenience recipes for regenerating the robot and launching the MuJoCo helper.
 - `mujoco/`: vendored upstream MuJoCo source tree. It is not required to run `basline.py`, but it is useful for local reference and engine work.
 - `mujoco_tutorial.ipynb`: local notebook for MuJoCo experimentation.
@@ -75,21 +73,18 @@ Relevant files:
 
 What the script currently does:
 
-- Defines `PointReacherEnv`, a simple MuJoCo environment with two slide joints and a randomly placed target.
-- Uses an 8D observation made from position, velocity, target position, and target delta.
+- Defines a single `RotomReachEnv`.
+- Samples a reachable Cartesian target for the `ee` site.
+- Moves the red target marker in the MuJoCo model to that sampled position.
 - Trains PPO with Stable-Baselines3.
-- Supports environment validation, random rollouts, policy evaluation, and viewer playback.
+- Supports environment validation, random rollouts, policy evaluation, live viewer playback, and rollout plots.
 
-The default task file is:
-
-```text
-assets/point_reacher.xml
-```
-
-The default saved model path is:
+Default task files:
 
 ```text
-artifacts/ppo_point_reacher.zip
+training/eval -> robot.xml
+viewer -> scene.xml
+checkpoint -> artifacts/ppo_rotom_reacher.zip
 ```
 
 ## RL Commands
@@ -97,31 +92,37 @@ artifacts/ppo_point_reacher.zip
 Validate the environment:
 
 ```bash
-./.venv/bin/python basline.py check-env
+./.venv/bin/mjpython basline.py check-env
 ```
 
 Run a short random rollout:
 
 ```bash
-./.venv/bin/python basline.py random --steps 10
+./.venv/bin/mjpython basline.py random --steps 10
 ```
 
 Train PPO:
 
 ```bash
-./.venv/bin/python basline.py train --timesteps 50000
+./.venv/bin/mjpython basline.py train --timesteps 50000
 ```
 
 Evaluate a saved policy:
 
 ```bash
-./.venv/bin/python basline.py eval --episodes 5
+./.venv/bin/mjpython basline.py eval --episodes 5
 ```
 
 Open the MuJoCo viewer and watch the trained policy:
 
 ```bash
-./.venv/bin/python basline.py play --episodes 3
+./.venv/bin/mjpython basline.py play --xml-path scene.xml --episodes 3
+```
+
+Save a headless-safe rollout plot:
+
+```bash
+./.venv/bin/mjpython basline.py plot-rollout --episodes 3 --output-path artifacts/rotom_rollout.png
 ```
 
 Available subcommands:
@@ -129,6 +130,7 @@ Available subcommands:
 - `train`
 - `eval`
 - `play`
+- `plot-rollout`
 - `random`
 - `check-env`
 
@@ -136,21 +138,22 @@ Available subcommands:
 
 What is already working:
 
-- `scene.xml` and `assets/point_reacher.xml` both load successfully through MuJoCo.
+- `robot.xml` and `scene.xml` load successfully through MuJoCo.
 - `basline.py check-env` passes.
-- `basline.py random` produces valid rollouts.
-- `basline.py eval` can load the default checkpoint in `artifacts/ppo_point_reacher.zip`.
+- `basline.py train` learns a working end-effector reaching policy with PPO.
+- `basline.py play --xml-path scene.xml` shows the cyan end-effector marker and red target marker in the viewer.
+- `basline.py plot-rollout` saves a trajectory figure without requiring an OpenGL display.
 
 What is not wired up yet:
 
-- The PPO starter does not train on `robot.xml` or `scene.xml`.
-- There is no Rotom-specific Gymnasium environment yet.
-- Task rewards, observations, and action spaces for the physical robot have not been defined in code.
+- The task is still pure reaching; it does not manipulate objects or use contacts.
+- The target is a visual marker only; there is no obstacle field or curriculum yet.
+- The exploratory notebook `rotom.ipynb` is not the recommended training entry point.
 
 ## Suggested Next Steps
 
-- Replace the point-mass task in `assets/point_reacher.xml` with a task built around `robot.xml` or `scene.xml`.
-- Add a dedicated Rotom Gymnasium environment instead of reusing the point-reacher scaffold.
-- Decide whether control should be torque-, position-, or hybrid-actuated for RL experiments.
-- Formalize reward terms for task completion, energy use, smoothness, and any morphology-specific constraints.
+- Add camera presets in `scene.xml` if you want deterministic cinematic recordings instead of the default free-camera render.
+- Consider switching from joint-setpoint actions to velocity or torque control if you want a harder but more physically direct policy.
+- Add curriculum over target distance or height if you want better sample efficiency on harder reaches.
+- Extend the observation with end-effector orientation if the task should care about pose, not just position.
 - Rename `basline.py` to `baseline.py` later if you want cleaner ergonomics, after updating references.
